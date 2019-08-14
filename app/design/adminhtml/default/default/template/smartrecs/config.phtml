@@ -1,0 +1,101 @@
+<?php
+/**
+ * for the rendering
+ * @category Peerius
+ * @package Peerius_Smartrecs
+ * @author Peerius Ltd
+ */
+?>
+<!-- Peerius SMART-recs config -->
+<script>
+  if (document.getElementById("nav")) // don't even try if an element with id nav doesn't exist
+  {
+    var peeriusMenuElem = document.getElementById("nav").lastElementChild;  //last element should be the Peerius menu element
+    var menuItems = document.getElementById("nav").children;
+    for (var i = 0; i < menuItems.length; i++) // loop through all the menu elements until you find one that has a class "active"
+    {
+      if (menuItems.item(i).className.indexOf("active"))
+        menuItems.item(i).className = menuItems.item(i).className.replace(/\bactive\b/, ''); //remove highlight from System menu element
+    }
+    peeriusMenuElem.className += " active"; //highlight Peerius menu element
+  }
+  
+  function togglePeeriusSections(show) {
+      var sections = $$('.section-config');
+      var sectionCnt = sections.length;
+      if (!show)
+      {
+        for (i = 1; i < sectionCnt; i++) {
+          sections[i].hide();
+        }
+      }
+      else
+      {
+        for (i = 1; i < sectionCnt; i++) {
+          sections[i].show();
+        }
+      }
+  }
+
+  document.observe('dom:loaded', function() {
+    var enAllSelect = document.getElementById("peerius_general_enableall");
+    var areRecsEnabled = enAllSelect.options[enAllSelect.selectedIndex].value == 1 ? true : false;
+    togglePeeriusSections(areRecsEnabled);
+    enAllSelect.addEventListener("change", enableDisable);
+    function enableDisable(e) {
+      var areRecsEnabled = enAllSelect.options[enAllSelect.selectedIndex].value == 1 ? true : false;
+      togglePeeriusSections(areRecsEnabled);
+    }
+  });
+</script>
+
+<?php
+if (!Mage::registry('peerius_404')) {
+  $skinUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN, Mage::app()->getFrontController()->getRequest()->isSecure()) . "/adminhtml/default/default/";
+  ?>
+  <link rel="stylesheet" type="text/css" 
+        href="<?php echo $skinUrl; ?>peerius/smartrecs/css/config.css" 
+        media="all">
+  
+  <div style="background: #e9eaeb none repeat scroll 0 0;box-shadow:0 0 50px 0 #fff inset">
+    <div class="navbar-inner"><a class="brand" style="float:left;margin:0;" href="https://www.peerius.com/">Peerius.com</a></div></div>
+  <br style="clear:both"><br><p>
+
+  <?php if (Mage::getStoreConfig('peerius/general/registrationstatus') < 1) { ?>
+  <script>
+  document.observe('dom:loaded', function() {
+    var header = $$('.content-header')[0];
+    header.hide();
+    var sections = $$('.section-config');
+    sections[0].hide();
+  });
+    
+  </script>
+    
+  <h2>Registration</h2>
+  <p>Please provide your email address and some details about your website to register this extension. Peerius will then send you further instruction on how to activate the extension, once your registration is successful.<br><br></p>
+    <div class="subscribe">
+      <form method="get" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/peerius/register") ?>"><input type="hidden" name="ip" value="<?php echo Mage::helper('core/http')->getRemoteAddr(true) ?>" /><p>
+          <input type="text" name="email" id="s2email" value="Enter email address..." size="255" onfocus="if (this.value == 'Enter email address...') {
+          this.value = '<?php echo Mage::getStoreConfig('trans_email/ident_general/email') ?>';
+        }" onblur="if (this.value == '') {
+          this.value = 'Enter email address...';
+        }" />
+        </p><p>      
+          <!--<input type="text" name="company" id="company" value="Company name..." size="255" onfocus="if (this.value == 'Company name...') {this.value = '<?php echo Mage::getStoreConfig('general/store_information/name') ?>';}" onblur="if (this.value == '') {this.value = 'Company name...';}" /><br>-->
+
+          <input type="text" name="message" id="message" value="Tell us about your request..." size="255" onfocus="if (this.value == 'Tell us about your request...') {
+          this.value = '';
+        }" onblur="if (this.value == '') {
+          this.value = 'Tell us about your request...';
+        }"  />
+
+        </p>
+
+        <p><input type="submit" name="register" value="Register" />
+
+        </p></form><br><br><br><br>
+    </div>
+  <?php } ?></p><br style="clear:both"><br><br>
+
+<?php } ?>

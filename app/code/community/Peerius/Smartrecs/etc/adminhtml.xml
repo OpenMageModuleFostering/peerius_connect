@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <smartrecs translate="title">
+            <title>Peerius</title>
+            <sort_order>500</sort_order>
+            <action>adminhtml/peerius/config</action>
+        </smartrecs>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <peerius>
+                                        <title>SMART-recs</title> <!-- Used in resources tree -->
+                                    </peerius>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

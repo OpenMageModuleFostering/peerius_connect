@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * for the tracking and rendering
+ * @category Peerius
+ * @package Peerius_Smartrecs
+ * @author Peerius Ltd
+ */
+
+?>
+<!-- Peerius SMART-recs tracking and rendering -->
+
+<?php
+$renderActive = (file_exists(dirname(__FILE__).'/render.phtml')) ? true:false;
+  
+if (Mage::helper('peerius_smartrecs')->isActive()) {
+  $trackingPixel = $this->getTrackingPixel();
+  if ($trackingPixel) {
+?>
+
+<script type="text/JavaScript" src="/js/peerius/smartrecs/smartrecs.js"></script>
+<script type="text/JavaScript">
+var peeriusPage = '<?php echo $this->escapeHtml(Mage::helper('peerius_smartrecs')->getPageType());?>';
+var peeriusDisabled = <?php echo Mage::helper('peerius_smartrecs')->getDisabled() ? 'true':'false';?>;
+var renderRoute = '<?php echo $this->escapeHtml(Mage::getUrl('peerius/Render'))?>';
+  
+function parsePeeriusJson(jsonData) {
+  // render recommendations ...
+  <?php if ($renderActive):?>
+  if (!peeriusDisabled) {
+    jsonData.forEach(function (widget) {
+      if (null !== $('peerius-smartrecs-'+widget.position)) {
+        renderRec(widget);
+      } else {
+        console.debug('div peerius-smartrecs-'+widget.position + ' not found');
+      }
+    });
+  }
+  <?php endif;?>
+} 
+
+var PeeriusCallbacks={
+  track:<?php echo $trackingPixel; ?>,
+  smartRecs:function(jsonData) {
+    parsePeeriusJson(jsonData);
+  }
+}
+</script>
+<?php }} ?>
+
+<?php
+if (Mage::helper('peerius_smartrecs')->isActive()) {
+  echo $this->getTrackingTag();
+}
+?>

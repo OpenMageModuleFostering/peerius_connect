@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<config>
+  <tabs>
+    <peerius translate="label">
+      <label>Peerius</label>
+      <sort_order>15</sort_order>
+    </peerius>
+  </tabs>
+  <sections>
+    <peerius translate="Peerius" module="adminhtml">
+      <label>SMART-recs</label>
+      <tab>peerius</tab>
+      <sort_order>10</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+      <groups>
+        <general translate="label comment">
+          <label>General</label>
+          <sort_order>50</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <client_name translate="Client Name">
+              <backend_model>peerius_smartrecs/token</backend_model>
+              <label>Client Name</label>
+              <comment>The Peerius client name</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </client_name>
+            <token translate="Client Token">
+              <backend_model>peerius_smartrecs/token</backend_model>
+              <label>Client Token</label>
+              <comment>The Peerius client token</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </token>
+            <testmode translate="Test Mode">
+              <label>Test Mode</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>30</sort_order>
+              <source_model>adminhtml/system_config_source_enabledisable</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </testmode>
+            <cronjob translate="Feed generation">
+              <label>Feed generation</label>
+              <comment>Schedule the feed generation</comment>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_dropdown_values</source_model>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </cronjob>
+            <widgetheight translate="Recommendation widget heights">
+              <label>Recommendation widget heights</label>
+              <comment>The heights of each individual recommendation widget</comment>
+              <frontend_type>text</frontend_type>
+              <depends>
+                <field_name>1</field_name>
+              </depends>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </widgetheight>
+          </fields>
+        </general>
+      </groups>
+    </peerius>
+  </sections>
+</config>

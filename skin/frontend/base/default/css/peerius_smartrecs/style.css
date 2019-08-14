@@ -1,0 +1,21 @@
+.block-recommendations {
+  background:none;
+}
+
+.block-recommendations .block-content {
+  background:none;
+}
+
+.block-recommendations .peerius-products-grid .peerius-item {
+  width: 16.8%;
+  display:inline-block;
+  min-width: 135px;
+  text-align: center;
+  padding: 10px 9px 5px;
+  vertical-align: top;
+}
+
+.block-recommendations .peerius-product-image {
+   display: block;
+   margin: 0 0 5px;
+}

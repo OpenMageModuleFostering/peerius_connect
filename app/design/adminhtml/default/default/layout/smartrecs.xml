@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+  <adminhtml_system_config_edit>
+       <!--Set active menu item-->
+      <reference name="menu">
+          <action method="setActive">
+              <menupath>nosto/index</menupath>
+          </action>
+      </reference>
+      <!-- Page content -->
+      <reference name="content">
+          <block type="smartrecs/config" name="peerius.config" template="smartrecs/config.phtml">
+          </block>
+      </reference>
+  </adminhtml_system_config_edit>
+  <adminhtml_noroute>
+        <reference name="content">
+            <block type="adminhtml/template" name="content.aclReload" after="content.noRoute" template="smartrecs/aclreloadbutton.phtml" />
+        </reference>
+    </adminhtml_noroute>
+</config>

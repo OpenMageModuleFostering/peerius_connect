@@ -1,0 +1,89 @@
+.navbar-inner {
+  background: transparent url("../img/navigation.png") repeat-x scroll 0 15px;
+  height:130px;
+}
+
+.brand {
+  background: transparent url("../img/logo-rollover.png") repeat-x scroll 0 0px;
+  display:block;
+  font-size: 0;
+  height: 130px;
+  line-height: 0;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 130px;
+  z-index: 3;
+  margin-left: 100px;
+}
+
+.container {
+    width:940px;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+a.brand:hover {
+  background-position: 0 -130px;
+}
+
+.content-header {
+  margin-top: -68px;
+  overflow: visible !important;
+  background: #fff none repeat scroll 0 0;
+}
+
+.subscribe {
+  padding-left:20px;
+  margin-top: 5px;
+}
+
+.subscribe form {
+    margin: 0;
+}
+
+.subscribe form p {
+    float: left;
+    margin-bottom: 3px;
+}
+
+.subscribe input[type=text] {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+  transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+  width: 180px;
+  border-radius: 4px;
+  color: #555;
+  display: inline-block;
+  font-size: 14px;
+  height: 20px;
+  line-height: 20px;
+  margin-bottom: 10px;
+  padding: 6px 6px;
+  vertical-align: middle;
+}
+
+.subscribe input[type=submit] {
+  background: #794FA0;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.subscribe input[type="submit"] {
+    background: #52a746 none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 3px;
+    color: #fff;
+    font-family: "PT Sans","PTSansBold",helvetica,arial,sans-serif;
+    margin: 0px 10px 0 5px;
+    padding: 6px 10px;
+}
+
+.subscribe input[type="submit"]:hover {
+    color: #000;
+}
+
+.entry-edit-head {
+  background: #52a746 none repeat scroll 0 0 !important;
+}

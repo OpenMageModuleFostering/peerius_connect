@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * to reload acl after 404 error message
+ * @category Peerius
+ * @package Peerius_Smartrecs
+ * @author Peerius Ltd
+ */
+
+?>
+
+<!-- Peerius SMART-recs acl reload button -->
+
+<?php
+Mage::register('peerius_404', 1);
+?>
+
+<a href="<?php echo $this->getUrl('adminhtml/peerius/aclreload'); ?>">
+    <?php echo $this->__('Reload ACL'); ?>
+</a>
+
+
+
+

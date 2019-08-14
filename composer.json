@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Peerius_Connect",
+    "type": "magento-module",
+    "license": "OSL-v3.0",
+    "homepage": "",
+    "description": "The trusted partner for personalisation.",
+    "authors": [
+    {
+        "name": "Peerius",
+        "email": "extensions@peerius.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

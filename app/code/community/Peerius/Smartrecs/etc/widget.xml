@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+
+<widgets>
+  <smartrecs_recommendations type="smartrecs/recommendations">
+    <name>Peerius SMART-recs</name>
+    <description type="desc">List the Peerius recommendations</description>
+    <parameters>
+      <rectype>
+        <label>Peerius Widget ID</label>
+        <visible>1</visible>
+        <required>1</required>
+        <type>text</type>
+        <value>widgetinstance</value>
+        <!--<description>with only one widget per page "standard" is fine</description>-->
+      </rectype>
+      <wtemplate>
+        <label>Template</label>
+        <visible>1</visible>
+        <required>1</required>
+        <type>select</type>
+        <default>horizontal.phtml</default>
+        <source_model>peerius_smartrecs/templates</source_model> 
+        <description>folder: /frontend/base/default/template/smartrecs/recs/</description>
+      </wtemplate>
+      <headline>
+        <label>Headline</label>
+        <visible>1</visible>
+        <type>text</type>
+        <default></default>
+      </headline>
+      <max>
+        <label>Number of products</label>
+        <visible>1</visible>
+        <type>text</type>
+        <default>3</default>
+      </max>
+    </parameters>
+  </smartrecs_recommendations>
+</widgets>

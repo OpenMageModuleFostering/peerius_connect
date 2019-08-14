@@ -1,0 +1,40 @@
+<?php 
+
+if ($this->getRequest()->getParam('recs')) {
+  $recs = json_decode($this->getRequest()->getParam('recs'));
+  $num = count($recs);
+  $idArr = array();
+  for ($i = 0; $i < $num; $i++) {
+    $refCodeArr[] = $recs[$i]->refCode;
+    $idArr[] = $recs[$i]->id;
+    $refCode2id[$recs[$i]->refCode] = $recs[$i]->id;
+  }
+}
+
+$title = $this->getRequest()->getParam('title') ?: $this->__('Recommended Products');
+?>
+<?php if($this->getItems()->getSize()): ?>
+<div class="block block-recommendations">
+    <div class="block-title">
+        <strong><span><?php echo $this->escapeHtml($title) ?></span></strong>
+    </div>
+    <div class="block-content">
+      <ul class="peerius-products-grid">
+        <?php foreach($this->getItems() as $_item): ?>
+            <li class="peerius-item">
+                <a onClick="Peerius.smartRecsClick(<?php echo $refCode2id[$_item->getSku()]?>)" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>" class="peerius-product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(135) ?>" width="135" height="135" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
+                <h2 class="product-name"><p class="product-name"><a onClick="Peerius.smartRecsClick(<?php echo $refCode2id[$_item->getSku()]?>)" href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></h2>
+                <div class="product-details">
+                    </p>
+                    <?php echo $this->getPriceHtml($_item, true, '-recommendations') ?>
+                    <!--<?php if ($this->helper('wishlist')->isAllow()) : ?>
+                        <a onClick="Peerius.smartRecsClick(<?php echo $refCode2id[$_item->getSku()]?>)" href="<?php echo $this->getAddToWishlistUrl($_item) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>-->
+                    <?php endif; ?>
+                </div>
+            </li>
+        <?php endforeach ?>
+        </ul>
+        <script type="text/javascript">decorateList('block-recommendations', 'none-recursive')</script>
+    </div>
+</div>
+<?php endif ?>

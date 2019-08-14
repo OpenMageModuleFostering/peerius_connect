@@ -1,0 +1,653 @@
+<?xml version="1.0"?>
+<config>
+  <tabs>
+    <peerius translate="label">
+      <label>Peerius</label>
+      <sort_order>15</sort_order>
+    </peerius>
+  </tabs>
+  <sections>
+    <peerius translate="Peerius" module="adminhtml">
+      <label>SMART-recs</label>
+      <tab>peerius</tab>
+      <sort_order>10</sort_order>
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+      <groups>
+        <general translate="General">
+          <label>General</label>
+          <sort_order>50</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <client_name translate="Client Name">
+              <label>Client Name</label>
+              <comment>The Peerius client name</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </client_name>
+            <token translate="Client Token">
+              <backend_model>peerius_smartrecs/token</backend_model>
+              <label>Client Token</label>
+              <comment>The Peerius client token</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </token>
+            <testmode translate="Test Mode">
+              <label>Test Mode</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>30</sort_order>
+              <source_model>adminhtml/system_config_source_enabledisable</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip><![CDATA[Enable Test Mode if you would like to test recommendations from the IP address of the PC or laptop that you are currently logged on. If you would like to test from a different machine, please use the 'peeriuspreview' parameter as shown:, e.g. www.yourshop.com/?peeriuspreview.<br><br>Only Disable Test Mode if you are ready to go live with Peerius SMART-recs.]]></tooltip>
+              <comment>If Test Mode is enabled recommendations are only visible to you</comment>
+            </testmode>
+            <cronjob translate="Feed generation">
+              <label>Feed generation</label>
+              <tooltip>Specify the time when Peerius should create and import the feed</tooltip>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_dropdown_values</source_model>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </cronjob>
+            <widgetheight translate="Recommendation widget heights">
+              <label>Recommendation widget heights</label>
+              <comment>The heights of each individual recommendation widget</comment>
+              <frontend_type>text</frontend_type>
+              <depends>
+                <field_name>1</field_name>
+              </depends>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </widgetheight>
+            <registrationstatus translate="registrationstatus">
+              <frontend_type>text</frontend_type>
+              <sort_order>60</sort_order>
+              <depends>
+                <field_name>1</field_name>
+              </depends>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </registrationstatus>
+            <registrationerror translate="registrationerror">
+              <frontend_type>text</frontend_type>
+              <sort_order>60</sort_order>
+              <depends>
+                <field_name>1</field_name>
+              </depends>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </registrationerror>
+            <enableall translate="Disable All">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </enableall>
+            <adminip translate="adminip">
+              <frontend_type>text</frontend_type>
+              <depends>
+                <field_name>1</field_name>
+              </depends>
+              <sort_order>80</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </adminip>
+            <creatingfeed translate="creatingfeed">
+              <frontend_type>text</frontend_type>
+              <sort_order>90</sort_order>
+              <depends>
+                <field_name>1</field_name>
+              </depends>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </creatingfeed>
+          </fields>
+        </general>
+        <home translate="Home">
+          <label>Home</label>
+          <sort_order>80</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>81</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_home</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>82</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip>This will be used as the title of your widget</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <max translate="Max number of products">
+              <label>Number of products</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>83</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/max</source_model> 
+              <tooltip>Number of products that should be displayed</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </max>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>84</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </home>
+        <category translate="Category">
+          <label>Category</label>
+          <sort_order>90</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>91</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_category</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>92</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip>This will be used as the title of your widget</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <max translate="Number of products">
+              <label>Number of products</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>93</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/max</source_model> 
+              <tooltip>Number of products that should be displayed</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </max>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model> 
+              <sort_order>94</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </category>
+        <product>
+          <label>Product Widget 1</label>
+          <sort_order>101</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <!--<comment><![CDATA[<a href="/index.php/?peeriuspreview" target="_blank"><em>Preview</em></a>]]></comment>-->
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>102</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_product1</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>103</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip>This will be used as the title of your widget</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <max translate="Number of products">
+              <label>Number of products</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>104</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/max</source_model> 
+              <tooltip>Number of products that should be displayed</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </max>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>105</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </product>
+        <product2>
+          <label>Product Widget 2</label>
+          <sort_order>110</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <!--<comment><![CDATA[<a href="/index.php/?peeriuspreview" target="_blank"><em>Preview</em></a>]]></comment>-->
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>113</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_product2</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>114</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip>This will be used as the title of your widget</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <max translate="Number of products">
+              <label>Number of products</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>115</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/max</source_model> 
+              <tooltip>Number of products that should be displayed</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </max>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>116</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </product2>
+        <!--<wishlist>
+          <label>Wishlist</label>
+          <sort_order>110</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>111</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_wishlist</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>112</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>113</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </disable>
+          </fields>
+        </wishlist>-->
+        <search>
+          <label>Search</label>
+          <sort_order>120</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>121</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_search</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>122</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip>This will be used as title of your widget</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <max translate="Number of products">
+              <label>Number of products</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>123</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/max</source_model> 
+              <tooltip>Number of products that should be displayed</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </max>
+            <success translate="Show for successful search results">
+              <label>Show for successful search results</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>124</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip>If this is set to "Yes", the search widget will be displayed on the search page. Default is "No", which displays the search widget only if the search results are empty</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </success>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>125</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </search>
+        <!--<checkout>
+          <label>Checkout</label>
+          <sort_order>130</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>131</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_checkout</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>132</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>133</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </checkout>-->
+        <basket>
+          <label>Basket</label>
+          <sort_order>140</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>141</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_basket</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>142</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <tooltip>This will be used as title of your widget</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <max translate="Number of products">
+              <label>Number of products</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>143</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/max</source_model> 
+              <tooltip>Number of products that should be displayed</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </max>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>144</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </basket>
+        <!--<order>
+          <label>Order</label>
+          <sort_order>150</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>151</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_order</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>152</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>153</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </order>-->
+        <!--<other>
+          <label>Other</label>
+          <sort_order>160</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+          <fields>
+            <template>
+              <label>Template</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>161</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <source_model>peerius_smartrecs/templates_other</source_model> 
+              <tooltip>Edit template files in /frontend/base/default/template/smartrecs/recs/</tooltip>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </template>
+            <headline translate="Headline">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>162</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+              <depends>
+                <disable>0</disable>
+              </depends>
+            </headline>
+            <disable translate="Enable recommendations">
+              <label>Enable recommendations</label>
+              <frontend_type>select</frontend_type>
+              <source_model>peerius_smartrecs/system_config_source_yesno</source_model>
+              <sort_order>163</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </disable>
+          </fields>
+        </other>-->
+      </groups>
+    </peerius>
+  </sections>
+</config>

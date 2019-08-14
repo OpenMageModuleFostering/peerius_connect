@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+
+<layout version="1.0.0">
+    <default><!--
+        <reference name="content">
+            <block type="smartrecs/recommendations" name="peerius.page.top" before="-"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-top</value>
+                </action>
+            </block>
+        </reference>
+        <reference name="left">
+            <block type="smartrecs/recommendations" name="peerius.column.left" before="-"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-left</value>
+                </action>
+            </block>
+        </reference>
+        <reference name="right">
+            <block type="smartrecs/recommendations" name="peerius.column.right" after=""
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-right</value>
+                </action>
+            </block>
+        </reference>-->
+    <reference name="before_body_end">
+<!--      <action method="addJs">
+        <script>peerius/smartrecs/smartrecs.js</script>
+      </action>-->
+      <block type="smartrecs/tracking" name="smartrecs.tracking" template="smartrecs/smartrecs.phtml" />
+      <!-- disable again if necessary -->
+      <action method="unsetChild" ifconfig="peerius/general/disabled">
+        <name>smartrecs.tracking</name>
+      </action>
+    </reference>
+      <reference name="head">
+        <action method="addCss">
+          <stylesheet>css/peerius_smartrecs/style.css</stylesheet>
+        </action>
+      </reference>
+    </default>
+
+    <!-- Custom handle for displaying a content placeholder last in page content section -->
+    <!--<peerius_tagging_page_default_footer>
+        <reference name="content">
+            <block type="smartrecs/recommendations" name="peerius.page.footer" after="-"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-footer</value>
+                </action>
+            </block>
+        </reference>
+    </peerius_tagging_page_default_footer>-->
+
+    <!-- Home page -->
+    <cms_index_index>
+        <!-- Add a content placeholders after the home page content -->
+        <reference name="content">
+            <block type="smartrecs/recommendations" name="peerius.page.home" after="-"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-homewidget1</value>
+                </action>
+            </block>
+        </reference>
+    </cms_index_index>
+
+    <!-- Shopping cart checkout page -->
+    <checkout_cart_index>
+        <reference name="content">
+            <block type="smartrecs/recommendations" name="peerius.page.cart" after="checkout.cart"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-basketwidget1</value>
+                </action>
+            </block>
+        </reference>
+    </checkout_cart_index>
+
+    <!-- Product page -->
+    <catalog_product_view>
+        <reference name="content">
+            <block type="smartrecs/recommendations" name="peerius.page.product" after="product.info"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-productwidget1</value>
+                </action>
+            </block>
+            <block type="smartrecs/recommendations" name="peerius.page.product1" after="peerius.page.product1"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-productwidget2</value>
+                </action>
+            </block>
+        </reference>
+    </catalog_product_view>
+
+    <!-- Category page -->
+    <catalog_category_default>
+        <update handle="peerius_tagging_catalog_category" />
+    </catalog_category_default>
+    <catalog_category_layered>
+        <update handle="peerius_tagging_catalog_category" />
+    </catalog_category_layered>
+    <peerius_tagging_catalog_category>
+        <reference name="content">
+            <block type="smartrecs/recommendations" name="peerius.page.category" before="category.products"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-categorywidget1</value>
+                </action>
+            </block>
+        </reference>
+    </peerius_tagging_catalog_category>
+
+    <!-- Search result page -->
+    <catalogsearch_result_index>
+        <reference name="content">
+            <block type="smartrecs/recommendations" name="peerius.page.search" before="search.result"
+                   template="smartrecs/render.phtml">
+                <action method="setData">
+                    <name>div_id</name>
+                    <value>peerius-smartrecs-searchwidget1</value>
+                </action>
+            </block>
+        </reference>
+    </catalogsearch_result_index>
+</layout>
