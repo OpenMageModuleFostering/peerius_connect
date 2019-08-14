@@ -78,6 +78,9 @@ class Peerius_Smartrecs_InfoController extends Mage_Core_Controller_Front_Action
 		    case "headline":
 				$dispName = 'Widget title';
 		        break;
+			case "number_of_products":
+				$dispName = 'Number of recs';
+		        break;
 			case "success":
 				$dispName = 'Show recs for all search?';
 				$dispValue = ($dispValue == 0) ? 'No, only for zero search' : 'Yes';
@@ -93,17 +96,46 @@ class Peerius_Smartrecs_InfoController extends Mage_Core_Controller_Front_Action
       $collection->addFieldToFilter('instance_type', 'smartrecs/recommendations');
 
 	  if($collection->getSize()>0) 
-	  {
-		$response .= '<h1>Widget Instance Manager</h1>';
-		foreach($collection as $item)
-		{
-			$response .= $item->title.'<hr>';
-			$response .= $item->widget_parameters;
-			$response .= '<br><br><br>';
-		}
+		  {
+			//$response .= '<div class=\'secTitle\'>Widget Instances</div>';
+			foreach($collection as $item)
+			{
+				$response .= '<div class=\'secTitle\'>Widget Instance: '.$item->title.'</div>';
+				$v = $item->widget_parameters;
+				$v = str_replace('{','',str_replace('}','',substr($v,5,strlen($v))));
+				$w = explode(';',$v);
+				//Mage::log('wid params: '.print_r($w,1), null, 'peerius_smartrec.log');
+				//Mage::log('widget count : '.count($w), null, 'peerius_smartrec.log');
+				for ($x = 0; $x < count($w) ; $x = $x+2)
+				{
+					$v1 = explode(':',$w[$x]);
+					$v2 = explode(':',$w[$x+1]);
+					if(str_replace('"','',$v1[2]) != "") {
+						$parName = str_replace('"','',$v1[2]);
+						$parValue = str_replace('"','',$v2[2]);
+						switch ($parName) {
+							case "rectype":
+								$parName = 'Widget name';
+								break;
+							case "wtemplate":
+								$parName = 'Template';
+								break;
+							case "headline":
+								$parName = 'Widget title';
+								break;
+							case "max":
+								$parName = 'Number of recs';
+								break;		    
+							default:
+								break;
+						}
+						$response .= '<div class=\'boxA\'> '.$parName. '</div><div class=\'boxB\'> '.$parValue.' </div><br />';
+					}
+				}
+			}
       }
       
-      $response .= '</section></body></html>';
+      $response .= '<div class=\'secTitle\'></div></section></body></html>';
       $this->getResponse()->setHeader('Content-Type', 'text/html')->setBody($response);
       
     }
@@ -261,5 +293,52 @@ class Peerius_Smartrecs_InfoController extends Mage_Core_Controller_Front_Action
          .boxB { float:left;display:in-line;padding:2px 0 0 4px;margin:1px;background-color: #A9Ae99; width:650px; height:22px;color:#000; }
       </style>";
   }
+  
+  
+	/**
+	* return peerius log file
+	*/
+	public function peeriusLogAction() {
+		//if ($this->checkToken()) {
+			$this->fileName =   Mage::getBaseDir('var') . DS . 'log' . DS . Mage::getStoreConfig($this->CONFIG_LOG_FILE_PATH).'peerius_smartrec.log'; 
+			$this->getResponse()->setHeader('Cache-Control', 'no-cache, must-revalidate');
+			$this->getResponse()->setHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
+			$this->getResponse()->setHeader('Content-Type', 'application/text; charset=UTF-8');
+
+			$file = new Varien_Io_File();
+			$this->_prepareDownloadResponse($this->fileName, $file->read($this->fileName), 'application/text'); 
+		//}
+	}
+
+	/**
+	* return magento log file
+	*/
+	public function magentoLogAction() {
+		//if ($this->checkToken()) {
+			$this->fileName =   Mage::getBaseDir('var') . DS . 'log' . DS . Mage::getStoreConfig($this->CONFIG_LOG_FILE_PATH).'magento.log'; 
+			$this->getResponse()->setHeader('Cache-Control', 'no-cache, must-revalidate');
+			$this->getResponse()->setHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
+			$this->getResponse()->setHeader('Content-Type', 'application/text; charset=UTF-8');
+
+			$file = new Varien_Io_File();
+			$this->_prepareDownloadResponse($this->fileName, $file->read($this->fileName), 'application/text'); 
+		//}
+	}
+
+	/**
+	* return exception log file
+	*/
+	public function exceptionLogAction() {
+		//if ($this->checkToken()) {
+			$this->fileName =   Mage::getBaseDir('var') . DS . 'log' . DS . Mage::getStoreConfig($this->CONFIG_LOG_FILE_PATH).'exception.log'; 
+			$this->getResponse()->setHeader('Cache-Control', 'no-cache, must-revalidate');
+			$this->getResponse()->setHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
+			$this->getResponse()->setHeader('Content-Type', 'application/text; charset=UTF-8');
+
+			$file = new Varien_Io_File();
+			$this->_prepareDownloadResponse($this->fileName, $file->read($this->fileName), 'application/text'); 
+		//}
+	}
 
 }
+

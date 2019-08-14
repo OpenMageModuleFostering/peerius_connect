@@ -59,8 +59,9 @@ class Peerius_Smartrecs_FeedController extends Mage_Core_Controller_Front_Action
       if (is_null($website)) {
         $website = Mage::app()->getWebsite(1);
       }
-      $this->fileName = Mage::getBaseDir('tmp') . DS . str_replace(' ', '_', $website->getName()) .
-              "_PeeriusFeed" . ".xml";
+      //$this->fileName = Mage::getBaseDir('tmp') . DS . str_replace(' ', '_', $website->getName()) . "_PeeriusFeed" . ".xml";
+      $clientName = Mage::getStoreConfig('peerius/general/client_name');
+      $this->fileName = $clientName . "_PeeriusFeed" . ".xml"; 
 
       $this->getResponse()->setHeader('Cache-Control', 'no-cache, must-revalidate');
       $this->getResponse()->setHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
@@ -95,11 +96,9 @@ class Peerius_Smartrecs_FeedController extends Mage_Core_Controller_Front_Action
     if ($creator->checkToken()) {
       $creator->process($website);
 
-      // ---
-
-
-      $this->fileName = Mage::getBaseDir('tmp') . DS . str_replace(' ', '_', $website->getName()) .
-              "_PeeriusFeed" . ".xml";
+      //$this->fileName = Mage::getBaseDir('tmp') . DS . str_replace(' ', '_', $website->getName()) .     "_PeeriusFeed" . ".xml";
+      $clientName = Mage::getStoreConfig('peerius/general/client_name');
+      $this->fileName = $clientName . "_PeeriusFeed" . ".xml"; 
 
       $this->getResponse()->setHeader('Cache-Control', 'no-cache, must-revalidate');
       $this->getResponse()->setHeader('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');

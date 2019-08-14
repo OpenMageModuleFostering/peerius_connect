@@ -12,6 +12,8 @@
 
 <?php
 $renderActive = (file_exists(dirname(__FILE__).'/render.phtml')) ? true:false;
+
+$enableRecs = Mage::getStoreConfig('peerius/general/enableall') == 1 ? true : false;
   
 if (Mage::helper('peerius_smartrecs')->isActive()) {
   $trackingPixel = $this->getTrackingPixel();
@@ -20,14 +22,14 @@ if (Mage::helper('peerius_smartrecs')->isActive()) {
 
 <script type="text/JavaScript" src="<?php echo $this->escapeHtml(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB))?>js/peerius/smartrecs/smartrecs.js"></script>
 <script type="text/JavaScript">
+<?php if ($renderActive && $enableRecs): ?>
 var peeriusPage = '<?php echo $this->escapeHtml(Mage::helper('peerius_smartrecs')->getPageType());?>';
+var peeriusRecsDisabled = <?php echo $enableRecs ? 'false' : 'true'; ?>;
 var peeriusDisabled = <?php echo Mage::helper('peerius_smartrecs')->getDisabled() ? 'true':'false';?>;
-var renderRoute = '<?php echo $this->escapeHtml(Mage::getUrl('peerius/Render'))?>';
-  
+var renderRoute = '<?php echo $this->escapeHtml(Mage::getUrl('peerius/Render', array('_forced_secure' => $this->getRequest()->isSecure())))?>';
 function parsePeeriusJson(jsonData) {
   // render recommendations ...
-  <?php if ($renderActive):?>
-  if (!peeriusDisabled) {
+  if (!peeriusDisabled && !peeriusRecsDisabled) {
     jsonData.forEach(function (widget) {
       if (null !== $('peerius-smartrecs-'+widget.position)) {
         renderRec(widget);
@@ -36,15 +38,15 @@ function parsePeeriusJson(jsonData) {
       }
     });
   }
-  <?php endif;?>
-} 
-
-var PeeriusCallbacks={
-  track:<?php echo $trackingPixel; ?>,
-  smartRecs:function(jsonData) {
-    parsePeeriusJson(jsonData);
-  }
+ } 
+<?php endif;?>
+var PeeriusCallbacks={track:<?php echo $trackingPixel; ?>};
+<?php if($enableRecs): ?>
+PeeriusCallbacks.smartRecs = function(jsonData) {
+	parsePeeriusJson(jsonData);
 }
+<?php endif;?>
+
 </script>
 <?php }} ?>
 

@@ -8,6 +8,7 @@
 class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
 
   protected $_pageType;
+  protected $_debugMode;
   /*
    * getter for page type
    */
@@ -21,7 +22,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
    */
   public function getTrackingPixel() {
     $fullActionName = Mage::app()->getFrontController()->getAction()->getFullActionName();
-
+	$debuMode = $this->setDebugMode();
     switch ($fullActionName) {
       case 'cms_index_index':
         $routeName = Mage::app()->getRequest()->getRouteName(); 
@@ -126,6 +127,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     if ($category AND $category->getId()) {
       $pixel['category'] = $this->_getCategoryBreadcrumb($category->getId());
     }
+
     return json_encode($pixel);
   }
   
@@ -149,12 +151,21 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $items = $cart->getAllItems();
     $pixel['basket']['items'] = array();
     foreach ($items as $item) {
-      if ($item->getParentItem()) {
-        continue;
-      }
+      //code pre v 1.0.8
+	  //if ($item->getParentItem())	continue;
+    
+      //if ($item->getProduct()->getData('visibility')==1) {
+	  	//Mage::log($item->getParentItem()->getProduct()->getData('sku'), null, 'peerius_smartrec.log');
+	    //continue;
+      //}
+      
+      // ignore skus that are not visible as product pages 
+      if(!$item->getProduct()->isVisibleInSiteVisibility()) continue;
+	  $dL = $this->_dLog('BASKET TRACKING: '.$item->getProduct()->getData('sku').' is '.strtoupper($item->getProductType()).' & '.($item->getProduct()->isVisibleInSiteVisibility()? "VISIBLE": "NOT VISIBLE"));
+	  
 	  $priceIncTax = Mage::helper('tax')->getPrice($item, $item->getPrice(), true);
       $newItem = array(
-          'refCode' => $item->getSku(),
+          'refCode' => $item->getProduct()->getData('sku'), 
           'qty'     => $item->getQty(),
           'price'   => $priceIncTax
       );
@@ -182,12 +193,16 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $cart = Mage::getModel('checkout/cart')->getQuote();
     $items = $cart->getAllItems();
     foreach ($items as $item) {
-      if ($item->getParentItem()) {
-        continue;
-      }
+      //code pre v 1.0.8
+	  //if ($item->getParentItem())	continue;
+	  
+	  // ignore skus that are not visible as product pages 
+	  if(!$item->getProduct()->isVisibleInSiteVisibility()) continue;
+	  $dL = $this->_dLog('CHECKOUT TRACKING: '.$item->getProduct()->getData('sku').' is '.strtoupper($item->getProductType()).' & '.($item->getProduct()->isVisibleInSiteVisibility()? "VISIBLE": "NOT VISIBLE"));
+
 	  $priceIncTax = Mage::helper('tax')->getPrice($item, $item->getPrice(), true);
       $newItem = array(
-          'refCode' => $item->getSku(),
+          'refCode' => $item->getProduct()->getData('sku'),
           'qty'     => (int) $item->getQty(),
           'price'   => $priceIncTax
       );
@@ -226,12 +241,16 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel['order']['orderNo'] = $order->getIncrementId();
     $items = $order->getAllItems();
     foreach ($items as $item) {
-      if ($item->getParentItem()) {
-        continue;
-      }
+      //code pre v 1.0.8
+	  //if ($item->getParentItem())	continue;
+	  
+	  // ignore skus that are not visible as product pages 
+	  if(!$item->getProduct()->isVisibleInSiteVisibility()) continue;
+	  $dL = $this->_dLog('ORDER TRACKING: '.$item->getProduct()->getData('sku').' is '.strtoupper($item->getProductType()).' & '.($item->getProduct()->isVisibleInSiteVisibility()? "VISIBLE": "NOT VISIBLE"));
+
 	  $priceIncTax = Mage::helper('tax')->getPrice($item, $item->getPrice(), true);
       $newItem = array(
-          'refCode' => $item->getSku(),
+          'refCode' => $item->getProduct()->getData('sku'), 
           'qty'     => (int) $item->getQtyOrdered(),
           'price'   => $priceIncTax
       );
@@ -267,6 +286,8 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $term = Mage::helper('catalogsearch')->getQueryText();
     $pixel['searchResults']['term'] = $this->escapeHtml($term);
     $searchResult = array_slice(Mage::registry('peerius_smartrecs_searchresults'), 0, 10);
+    $dL = $this->_dLog('SEARCH TRACKING: '.print_r($searchResult,1));
+
     $pixel['searchResults']['results'] = $searchResult;
     return json_encode($pixel);
   }
@@ -333,7 +354,6 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
 
         $fullPath = array();
         foreach ($p as $treeCat) {
-          // Root-Kategorie 1 überspringen
           if ($treeCat <= 2)
             continue;
           $category = Mage::getModel('catalog/category')
@@ -396,5 +416,31 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     }
     return '<script type="text/JavaScript" src="//'.$this->escapeHtml(Mage::getStoreConfig('peerius/general/client_name')).'.peerius.com/tracker/peerius.page" charset="UTF-8"></script>';
   }
- 
+  
+  private function setDebugMode()
+  {
+	$this->_debugMode = false;
+	if(Mage::app()->getRequest()->getParam('pbug') == 1 && Mage::getSingleton('core/session')->getPeeriusDebug()== null)
+	{
+		Mage::getSingleton('core/session')->setPeeriusDebug(true); 
+	} 
+	$this->_debugMode = Mage::getSingleton('core/session')->getPeeriusDebug() != null ? true : false;	
+
+	if(Mage::app()->getRequest()->getParam('pbug') != null && Mage::app()->getRequest()->getParam('pbug') == 0 && Mage::getSingleton('core/session')->getPeeriusDebug()!= null)
+	{
+		Mage::getSingleton('core/session')->unsPeeriusDebug(); 
+		$this->_debugMode = false;
+	}
+	if(Mage::app()->getRequest()->getParam('pbug') != null)
+		Mage::log('PEERIUS DEBUG '.( Mage::app()->getRequest()->getParam('pbug')==1 ? 'EN' : 'DIS').'ABLED', null, 'peerius_smartrec.log');
+	return $this->_debugMode;
+  }
+  
+  private function _dLog($msg)
+  {
+
+  	if($this->_debugMode == true) Mage::log($msg, null, 'peerius_smartrec.log');
+  	return true;
+  }
+
 }
