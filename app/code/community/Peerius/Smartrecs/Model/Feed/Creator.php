@@ -131,6 +131,10 @@ class Peerius_Smartrecs_Model_Feed_Creator {
 	$debugProducts = Mage::app()->getRequest()->getParam('items') ? Mage::app()->getRequest()->getParam('items') : 10;
 	$this->log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
 	$this->log('DEBUG MODE : '.($debugMode == true ? 'enabled. Creating feed for '. $debugProducts. ' products.' :'disabled'));
+	
+	// Read Attributes to exclude from query string of feed url - Quick hack as some attribute names may cause issues.
+	$attribsToExclude = Mage::app()->getRequest()->getParam('attribsToExclude') ? Mage::app()->getRequest()->getParam('attribsToExclude') : "" ; 
+	if($attribsToExclude && $attribsToExclude!="") $this->log('Attributes to exclude: '.$attribsToExclude, null, 'peerius_smartrec.log');	
 	//###################### DEBUG CODE :MG #####################
 
     $this->log('Feed creation STARTED');
@@ -161,7 +165,7 @@ class Peerius_Smartrecs_Model_Feed_Creator {
 	$baseCode = Mage::app()->getBaseCurrencyCode();      
 	$allowedCurrencies = Mage::getModel('directory/currency')->getConfigAllowCurrencies(); 
 	$rates = Mage::getModel('directory/currency')->getCurrencyRates($baseCode, array_values($allowedCurrencies));
-	Mage::log('RATES: '.($rates ? print_r($rates,1) : 'NO RATES - SINGLE CURRENCY'), null, 'peerius_smartrec.log');	
+	$this->log('CURRENCY RATES : '.($rates ? http_build_query($rates) : 'NO RATES - SINGLE CURRENCY'), null, 'peerius_smartrec.log');	
 	
     try {
       
@@ -201,7 +205,7 @@ class Peerius_Smartrecs_Model_Feed_Creator {
         $rss .= '<item>';
         $rss .= '<title><![CDATA[' . $product->getName() . ']]></title>';
         $rss .= '<link>' . $product->getProductUrl() . '</link>';
-        $rss .= '<guid>' . $product->getSku() . '</guid>';
+        $rss .= '<guid><![CDATA[' . $product->getSku() . ']]></guid>';
         if ($product->getThumbnail())
           $rss .= '<p:imageLink>' . Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product' . $product->getThumbnail() . '</p:imageLink>';
 
@@ -243,7 +247,7 @@ class Peerius_Smartrecs_Model_Feed_Creator {
                 $rss .= '<p:attribute name="' . $attr['attribute_code'] . '"><![CDATA[' . $childProduct->getAttributeText($attr['attribute_code']) . ']]></p:attribute>';
               }
               $rss .= '<p:attribute name="link">' . $childProduct->getProductUrl() . '</p:attribute>';
-              $rss .= '<p:attribute name="guid">' . $childProduct->getSku() . '</p:attribute>';
+              $rss .= '<p:attribute name="guid"><![CDATA[' . $childProduct->getSku() . ']]></p:attribute>';
               $rss .= '<p:attribute name="magento_id">' . $childProduct->getId() . '</p:attribute>';
               if ($product->getThumbnail())
                 $rss .= '<p:imageLink>' . Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product' . $childProduct->getThumbnail() . '</p:imageLink>';
@@ -264,7 +268,7 @@ class Peerius_Smartrecs_Model_Feed_Creator {
         }
 
         $rss .= '<pubDate>' . $product->getcreated_at() . '</pubDate>';
-        $rss .= '<description><![CDATA[' . $product->getDescription() . ']]></description>';
+        $rss .= '<description><![CDATA[' . $product->getShortDescription() . ']]></description>';
 
         if ($product->getAttribute('manufacturer') instanceof Mage_Eav_Model_Entity_Attribute_Abstract) {
           $rss .= '<p:brand><![CDATA[' . $product->getAttributeText('manufacturer') . ']]></p:brand>';
@@ -272,9 +276,9 @@ class Peerius_Smartrecs_Model_Feed_Creator {
         $rss .= '<p:inStock>' . $this->_getStockStatus($product) . '</p:inStock>';
         $rss .= '<p:stock>' . ((int) $product->getQty() > 0 ? (int) $product->getQty() : 0) . '</p:stock>';
         $rss .= '<p:recommend>Y</p:recommend>';
-        $rss .= '<p:recommended>' . $this->_getRecommended($product) . '</p:recommended>';
+        $rss .= '<p:recommended><![CDATA[' . $this->_getRecommended($product) . ']]></p:recommended>';
         $rss .= '<p:attribute name="magento_id">' . $product->getId() . '</p:attribute>';
-        $rss .= $this->_getAttributes($product);
+        $rss .= $this->_getAttributes($product,$attribsToExclude);
         $rss .= $this->_getTags($product);
         $rss .= '</item>';
         
@@ -326,7 +330,7 @@ class Peerius_Smartrecs_Model_Feed_Creator {
 
         $fullPath = array();
         foreach ($p as $treeCat) {
-          // Root-Kategorie 1 überspringen
+          // Root-Kategorie 
           if ($treeCat <= 2)
             continue;
           $category = Mage::getModel('catalog/category')
@@ -433,15 +437,21 @@ class Peerius_Smartrecs_Model_Feed_Creator {
    * @param Mage_Core_Catalog_Product $product
    * @return string
    */
-  protected function _getAttributes($product) {
+  protected function _getAttributes($product, $attribsToExclude) {
     $attributes = $product->getAttributes();
     $rss = '';
-    foreach ($attributes as $attribute) {
+	$attribsToExcludeArray = explode('|',$attribsToExclude);
+	foreach ($attributes as $attribute) {
       if ($attribute->getIsVisibleOnFront()) {
         $attributeCode = $attribute->getAttributeCode();
-        $label = $attribute->getFrontend()->getLabel($product);
-        $value = $attribute->getFrontend()->getValue($product);
-        $rss .= '<p:attribute name="' . $attributeCode . '"><![CDATA[' . $value . ']]></p:attribute>';
+        if (in_array($attributeCode,$attribsToExcludeArray))
+        	continue;
+        else
+        {
+        	$label = $attribute->getFrontend()->getLabel($product);
+  			$value = $attribute->getFrontend()->getValue($product);
+			$rss .= '<p:attribute name="' . $attributeCode . '"><![CDATA[' . $value . ']]></p:attribute>';
+        }
       }
     }
     return $rss;

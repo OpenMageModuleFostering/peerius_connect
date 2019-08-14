@@ -88,8 +88,8 @@ class Peerius_Smartrecs_Block_Recommendations extends Mage_Core_Block_Template i
 
       if ($template) {
         $template = (strpos($template, DS) === false) ? 'smartrecs/recs/'.$template : $template;
-
-        if ($this->getRequest()->getParam('peeriuslocalpreview') AND !array_key_exists($id, $this->_fixTemplates)) {
+		
+        if ($this->getRequest()->getParam('peeriuslocalpreview') AND !array_key_exists($id, $this->_fixTemplates)) {        	
           return Mage::getSingleton('core/layout')
                           ->createBlock('smartrecs/template')
                           ->setTemplate($template)

@@ -133,4 +133,17 @@ class Peerius_Smartrecs_Helper_Data extends Mage_Core_Helper_Abstract {
       return false;
       
     }
+    
+	/*
+	 * read the plugin settings to see if recommendations are disabled
+	 * @return bool
+     */
+	public function getRecsAsSKUsOnly() {
+		
+		if (Mage::getStoreConfig('peerius/general/enableall') == 1 && Mage::getStoreConfig('peerius/general/getrecsasskusonly') == 1) {
+			return true;
+		}
+		return false;
+	}
+    
 }

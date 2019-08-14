@@ -7,13 +7,16 @@ if ($this->getRequest()->getParam('recs')) {
   for ($i = 0; $i < $num; $i++) {
     $refCodeArr[] = $recs[$i]->refCode;
     $idArr[] = $recs[$i]->id;
-    $refCode2id[$recs[$i]->refCode] = $recs[$i]->id;
+    $clickId[$recs[$i]->refCode] = $recs[$i]->id;
   }
 }
-
 $title = $this->getRequest()->getParam('title') ?: $this->__('Recommended Products');
+$curSymbol = $this->getCurrencySymbol();
+$curCode = $this->getCurrencyCode();
 ?>
-<?php if($this->getItems()->getSize()): ?>
+<?php 
+/*Only Edit this block if you are rendering Peerius Recommendations after retrieving the product details from magento */
+if($this->isRecContentRefCodeOnly()):  ?>
 <div class="block block-recommendations">
     <div class="block-title">
         <strong><span><?php echo $this->escapeHtml($title) ?></span></strong>
@@ -22,17 +25,56 @@ $title = $this->getRequest()->getParam('title') ?: $this->__('Recommended Produc
       <ul class="peerius-products-grid">
         <?php foreach($this->getItems() as $_item): ?>
             <li class="peerius-item">
-                <a onClick="Peerius.smartRecsClick(<?php echo $refCode2id[$_item->getSku()]?>)" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>" class="peerius-product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(135) ?>" width="135" height="135" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
-                <h2 class="product-name"><p class="product-name"><a onClick="Peerius.smartRecsClick(<?php echo $refCode2id[$_item->getSku()]?>)" href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></h2>
+                <a onClick="Peerius.smartRecsClick(<?php echo $clickId[$_item->getSku()]?>)" href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_item->getName()) ?>" class="peerius-product-image"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(135) ?>" width="135" height="135" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" /></a>
+                <h2 class="product-name"><p class="product-name"><a onClick="Peerius.smartRecsClick(<?php echo $clickId[$_item->getSku()]?>)" href="<?php echo $_item->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></h2>
                 <div class="product-details">
-                    </p>
                     <?php echo $this->getPriceHtml($_item, true, '-recommendations') ?>
-                    <!--<?php if ($this->helper('wishlist')->isAllow()) : ?>
-                        <a onClick="Peerius.smartRecsClick(<?php echo $refCode2id[$_item->getSku()]?>)" href="<?php echo $this->getAddToWishlistUrl($_item) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>-->
-                    <?php endif; ?>
                 </div>
             </li>
         <?php endforeach ?>
+        </ul>
+        <script type="text/javascript">decorateList('block-recommendations', 'none-recursive')</script>
+    </div>
+</div>
+<?php 
+/*Only Edit this block if you are rendering all product details as sent by Peerius Recommendations .i.e., no Magento lookup done here */
+else: ?>
+<div class="block block-recommendations">
+    <div class="block-title">
+        <strong><span><?php echo $this->escapeHtml($title) ?></span></strong>
+    </div>
+    <div class="block-content">
+      <ul class="peerius-products-grid">
+        <?php $json_recs = json_decode($this->getRequest()->getParam('recs'));
+         $maxRecs = $this->getRequest()->getParam('max');
+         $ctr = 1;
+         foreach($json_recs as $_item): ?>
+         	<?php $cId = $clickId[$_item->refCode]?>
+			<li class="peerius-item">
+				 <a onClick="Peerius.smartRecsClick(<?php echo $cId?>)" href="<?php echo $_item->url ?>" title="<?php echo $this->escapeHtml($_item->title) ?>" class="peerius-product-image">
+				 <img src="<?php echo $_item->img ?>" width="135" alt="<?php echo $this->escapeHtml($_item->title) ?>" />
+				 </a>
+				<h2 class="product-name"><p class="product-name"><a onClick="Peerius.smartRecsClick(<?php echo $cId?>)" href="<?php echo $_item->url ?>"><?php echo $this->escapeHtml($_item->title) ?></a></h2>
+				<div class="product-details">
+					 <div class="price-box">
+						<?php if($_item->prices->$curCode->unitPrice != $_item->prices->$curCode->salePrice): ?>
+						<p class="old-price">
+							<span class="price-label">Regular Price:</span>
+							<span class="price" id="old-price-<?php echo $cId?>"><?php echo $curSymbol.$_item->prices->$curCode->unitPrice ?></span>
+						</p>
+						<?php endif  ?>
+						<p class="special-price">
+							<span class="price-label"><?php echo ($_item->prices->$curCode->unitPrice != $_item->prices->$curCode->salePrice ? 'Special ': '') ?>Price:</span>
+							<span class="price-including-tax">
+								<span class="label">Incl. Tax:</span>
+								<span class="price" id="price-including-tax-<?php echo $cId?>"><?php echo $curSymbol.$_item->prices->$curCode->salePrice ?></span>
+							</span>
+						</p>
+					</div>
+				</div>
+			</li>
+        <?php if($ctr++ == $maxRecs) break;
+        endforeach ?>
         </ul>
         <script type="text/javascript">decorateList('block-recommendations', 'none-recursive')</script>
     </div>

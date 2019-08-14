@@ -9,6 +9,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
 
   protected $_pageType;
   protected $_debugMode;
+  protected $_refCodeOnlyOrFull;
   /*
    * getter for page type
    */
@@ -22,7 +23,9 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
    */
   public function getTrackingPixel() {
     $fullActionName = Mage::app()->getFrontController()->getAction()->getFullActionName();
-	$debuMode = $this->setDebugMode();
+	$debugMode = $this->setDebugMode();
+	$this->_refCodeOnlyOrFull = Mage::helper('peerius_smartrecs')->getRecsAsSKUsOnly()? 'refCodeOnly' : 'full';
+	
     switch ($fullActionName) {
       case 'cms_index_index':
         $routeName = Mage::app()->getRequest()->getRouteName(); 
@@ -76,7 +79,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'home',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {
@@ -94,7 +97,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'product',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {
@@ -117,7 +120,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'category',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {
@@ -141,7 +144,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'basket',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {
@@ -184,7 +187,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'checkout',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {
@@ -230,7 +233,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'order',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {
@@ -277,7 +280,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'searchresults',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {
@@ -301,7 +304,7 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     $pixel = array(
       'type' => 'wishlist',
       'lang' => $this->_getLang(),
-      'recContent' => 'refCodeOnly'
+      'recContent' => $this->_refCodeOnlyOrFull
     );
     $user = $this->_getUser();
     if ($user) {

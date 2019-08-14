@@ -22,18 +22,21 @@
   
   function togglePeeriusSections(show) {
       var sections = $$('.section-config');
+      var recsAsSKUsList = $$('#row_peerius_general_getrecsasskusonly');
       var sectionCnt = sections.length;
       if (!show)
       {
         for (i = 1; i < sectionCnt; i++) {
           sections[i].hide();
         }
+        recsAsSKUsList[0].hide();
       }
       else
       {
         for (i = 1; i < sectionCnt; i++) {
           sections[i].show();
         }
+        recsAsSKUsList[0].show();
       }
   }
 
@@ -58,7 +61,8 @@ if (!Mage::registry('peerius_404')) {
         media="all">
   
   <div style="background: #e9eaeb none repeat scroll 0 0;box-shadow:0 0 50px 0 #fff inset">
-    <div class="navbar-inner"><a class="brand" style="float:left;margin:0;" href="https://www.peerius.com/">Peerius.com</a></div></div>
+    <div class="navbar-inner"><a class="peeriusBrand" style="" href="https://www.peerius.com/">
+    <span class="peeriusBrandText">Peerius Connect Admin</span></a></div></div>
   <br style="clear:both"><br><p>
 
   <?php if (Mage::getStoreConfig('peerius/general/registrationstatus') < 1) { ?>

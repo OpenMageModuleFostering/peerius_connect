@@ -30,14 +30,14 @@ class Peerius_Smartrecs_InfoController extends Mage_Core_Controller_Front_Action
 	  	$this->log("Peerius_Connect is not available");
 	  }
       
-      $configs = Mage::getModel('core/config_data')->getCollection()->addFieldToFilter('path',array('like'=>'peerius%'))->setOrder('config_id',Varien_Data_Collection::SORT_ORDER_ASC);
-      $siteName = Mage::getStoreConfig('peerius/general/client_name',Mage::app()->getStore()); 
+      $configs = Mage::getModel('core/config_data')->getCollection()->addFieldToFilter('path',array('like'=>'peerius%'))->setOrder('path',Varien_Data_Collection::SORT_ORDER_ASC);
       $response = '<!doctype html><html lang=\'en-gb\'><head><meta charset=\'utf-8\'><title> CONFIG: '.$siteName.'</title>'.$this->getCSS().'</head><body style="font-family:Arial;">';
       $response .= '<section><h1>Peerius Connect Configuration : '. $siteName . '</h1> (v ' .$connectVersion. ')';
 
       $sec1 = "";
       $sec2 = "";
       foreach ($configs as $config) {
+      	$this->log($config->getPath());
       	$path = str_replace('max','number_of_products', $config->getPath());
        
         $name_arr = explode ("/", $path);
@@ -57,8 +57,12 @@ class Peerius_Smartrecs_InfoController extends Mage_Core_Controller_Front_Action
 		        $dispValue = $dispValue.' (ENCODED: '.sha1($dispValue).')';
 		        break;
 		    case "enableall":
-		    	$dispName = 'Are Recs anabled for site?';
+		    	$dispName = 'Are Recs enabled for site?';
 		        $dispValue = ($dispValue == 1) ? 'Yes' : 'No';
+		        break;
+		    case "getrecsasskusonly":
+				$dispName = 'Return recs as :';
+				$dispValue = ($dispValue == 1) ? 'refCodeOnly (only refCodes)' : 'full (includes refCode, title, product url, image url, prices)';
 		        break;
 		    case "disable":
 		    	$dispName = 'Are Recs enabled for page?';
