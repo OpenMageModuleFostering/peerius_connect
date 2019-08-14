@@ -354,20 +354,24 @@ class Peerius_Smartrecs_Model_Feed_Creator {
    * @return string
    */
   protected function _getRecommended($product) {
-    $all = array();
-    $related = $product->getRelatedProductIds();
-    foreach ($related as $id) {
-      $all[$id] = $id;
-    }
-    $crosssell = $product->getCrossSellProducts();
-    foreach ($crosssell as $_item) {
-      $all[$_item->getId()] = $_item->getId();
-    }
-    $upsell = $product->getUpSellProductCollection();
-    foreach ($upsell as $_item) {
-      $all[$_item->getId()] = $_item->getId();
-    }
-    return implode(',', $all);
+	 $all = array();
+	 $related = $product->getRelatedProductIds();
+	 foreach ($related as $id) {
+	   $all[$id] = Mage::getModel('catalog/product')->load($id)->getSku();
+	   //$this->log("Related Product is :".$all[$id]);
+	 }
+	 
+	 $crosssell = $product->getCrossSellProducts();
+	 foreach ($crosssell as $_item) {
+	   $all[$_item->getId()] = $_item->getSku();
+	   //$this->log("Cross Selling Product is :".$all[$_item->getId()]);
+	 }
+	 $upsell = $product->getUpSellProductCollection();
+	 foreach ($upsell as $_item) {
+	   $all[$_item->getId()] = $_item->getSku();
+	   //$this->log("Up Selling Product is :".$all[$_item->getId()]);
+	 }
+	 return implode(',', $all);
   }
 
   /**

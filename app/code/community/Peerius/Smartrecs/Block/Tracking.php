@@ -152,10 +152,11 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
       if ($item->getParentItem()) {
         continue;
       }
+	  $priceIncTax = Mage::helper('tax')->getPrice($item, $item->getPrice(), true);
       $newItem = array(
           'refCode' => $item->getSku(),
           'qty'     => $item->getQty(),
-          'price'   => $item->getPrice()
+          'price'   => $priceIncTax
       );
       $pixel['basket']['items'][] = $newItem;
     }
@@ -184,10 +185,11 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
       if ($item->getParentItem()) {
         continue;
       }
+	  $priceIncTax = Mage::helper('tax')->getPrice($item, $item->getPrice(), true);
       $newItem = array(
           'refCode' => $item->getSku(),
           'qty'     => (int) $item->getQty(),
-          'price'   => $item->getPrice()
+          'price'   => $priceIncTax
       );
       $pixel['checkout']['items'][] = $newItem;
     }
@@ -227,10 +229,11 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
       if ($item->getParentItem()) {
         continue;
       }
+	  $priceIncTax = Mage::helper('tax')->getPrice($item, $item->getPrice(), true);
       $newItem = array(
           'refCode' => $item->getSku(),
           'qty'     => (int) $item->getQtyOrdered(),
-          'price'   => $item->getPrice()
+          'price'   => $priceIncTax
       );
       $pixel['order']['items'][] = $newItem;
     }
@@ -393,7 +396,5 @@ class Peerius_Smartrecs_Block_Tracking extends Mage_Core_Block_Template {
     }
     return '<script type="text/JavaScript" src="//'.$this->escapeHtml(Mage::getStoreConfig('peerius/general/client_name')).'.peerius.com/tracker/peerius.page" charset="UTF-8"></script>';
   }
-  // alert(JSON.stringify(PeeriusCallbacks))
  
 }
-
