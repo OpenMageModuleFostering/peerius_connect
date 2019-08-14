@@ -128,7 +128,14 @@ class Peerius_Smartrecs_Model_Feed_Creator {
     $visiblityCondition = array('in' => array(2, 3, 4));
     $_catalogInventoryTable = method_exists($adapter, 'getTableName') ? $adapter->getTableName('cataloginventory_stock_item') : 'catalog_category_product_index';
 
-    $this->log('started writing products');
+    //###################### DEBUG CODE :MG #####################
+	$debugMode = Mage::app()->getRequest()->getParam('debug') == 1 ? true : false;
+	$debugProducts = Mage::app()->getRequest()->getParam('items') ? Mage::app()->getRequest()->getParam('items') : 10;
+	$this->log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+	$this->log('DEBUG MODE : '.($debugMode == true ? 'enabled. Creating feed for '. $debugProducts. ' products.' :'disabled'));
+	//###################### DEBUG CODE :MG #####################
+
+    $this->log('Feed creation STARTED');
 
     $this->_changeTheme(Mage::getStoreConfig('design/package/name', $website->getDefaultStore()->getCode()), Mage::getStoreConfig('design/package/theme', $website->getDefaultStore()->getCode()));
 
@@ -142,26 +149,22 @@ class Peerius_Smartrecs_Model_Feed_Creator {
             ->addCategoryIds()
             //->addAttributeToFilter('type_id', array('eq' => 'configurable'))
             ->addAttributeToFilter('visibility', $visiblityCondition)
-//            ->joinTable('catalog/product_relation', 'child_id=entity_id', array(
-//                'parent_id' => 'parent_id'
-//            ), null, 'left')
+//          ->joinTable('catalog/product_relation', 'child_id=entity_id', array('parent_id' => 'parent_id'), null, 'left')
             ->addPriceData(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID, $website->getWebsiteId());
-    //        ->load();
-
-//    if (Mage::app()->getRequest()->getParam('skus')) {
-//      $skus = explode(',', Mage::app()->getRequest()->getParam('skus'));
-//      $productCollection->addAttributeToFilter('SKU', array('like' => $skus));
-//    }
-
-    //Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($productCollection);
-    //Mage::getModel('cataloginventory/stock_status')->addStockStatusToProducts($productCollection);
+//      	->load();
 
     $productsCount = $productCollection->getSize();
-
+    $this->log('Total products found : ' . $productsCount);
+    
+	$ctr = 0;
+	
     try {
-
       foreach ($productCollection as $product) {
-//      if ($rCnt++ > 500) continue;
+      	
+      	//###################### DEBUG CODE :MG #####################
+      	if ($debugMode && $ctr > $debugProducts) break;
+      	//###################### DEBUG CODE :MG #####################
+      	
         $categoryIds = $product->getCategoryIds();
         $parentCategoryBreadcrumbs = false;
         $parent = false;
@@ -171,7 +174,6 @@ class Peerius_Smartrecs_Model_Feed_Creator {
           $productsCount--;
           continue;
         }
-
 
         // if a product is not in a category skip it also
         if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
@@ -232,7 +234,7 @@ class Peerius_Smartrecs_Model_Feed_Creator {
                 $rss .= '<p:imageLink>' . Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product' . $childProduct->getThumbnail() . '</p:imageLink>';
               $stockItem = $childProduct->getStockItem();
               $stockQty = ($stockItem instanceof Mage_CatalogInventory_Model_Stock_Item) ?
-                      (int) $stockItem->getQty() : 0;
+                      ((int) $stockItem->getQty() > 0 ? (int) $stockItem->getQty() : 0) : 0;
               $rss .= '<p:stock>' . $stockQty . '</p:stock>';
               $rss .= '</p:variant>';
             }
@@ -246,7 +248,6 @@ class Peerius_Smartrecs_Model_Feed_Creator {
           }
         }
 
-
         $rss .= '<pubDate>' . $product->getcreated_at() . '</pubDate>';
         $rss .= '<description><![CDATA[' . $product->getDescription() . ']]></description>';
 
@@ -254,20 +255,20 @@ class Peerius_Smartrecs_Model_Feed_Creator {
           $rss .= '<p:brand><![CDATA[' . $product->getAttributeText('manufacturer') . ']]></p:brand>';
         }
         $rss .= '<p:inStock>' . $this->_getStockStatus($product) . '</p:inStock>';
-        $rss .= '<p:stock>' . (int) $product->getQty() . '</p:stock>';
+        $rss .= '<p:stock>' . ((int) $product->getQty() > 0 ? (int) $product->getQty() : 0) . '</p:stock>';
         $rss .= '<p:recommend>Y</p:recommend>';
         $rss .= '<p:recommended>' . $this->_getRecommended($product) . '</p:recommended>';
         $rss .= '<p:attribute name="magento_id">' . $product->getId() . '</p:attribute>';
         $rss .= $this->_getAttributes($product);
         $rss .= $this->_getTags($product);
         $rss .= '</item>';
+        $ctr++;
       }
 
-      $this->log($productsCount . " items");
+      $this->log('Total entries created : ' . ($ctr - 1) );
     } catch (Exception $e) {
       $this->log("an error occured: " . $e->getMessage());
     }
-    $this->log("done");
 
 
     if ($productsCount == 0) {
@@ -276,9 +277,9 @@ class Peerius_Smartrecs_Model_Feed_Creator {
     }
 
     $now = microtime(true);
-
-    $this->log('Elapsed ' . date("H:i:s", ($now - $profilingStart)));
-    $this->log('Memory ' . memory_get_peak_usage() / 1048576 . 'MB');
+    $this->log("Feed creation COMPLETED in " . date("H:i:s", ($now - $profilingStart)));
+    $this->log('Memory used : ' . round(memory_get_peak_usage() / 1048576) . 'MB');
+    $this->log('===================================================');
     return $rss;
   }
 

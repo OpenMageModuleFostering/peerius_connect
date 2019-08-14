@@ -21,8 +21,8 @@ class Peerius_Smartrecs_Block_Template extends Mage_Catalog_Block_Product_List {
         ->addAttributeToSelect('*');
     
     $num = false;
-    
     $skus = false;
+    $max = false;
     
     if ($this->getRequest()->getParam('skus')) {
       $skus = explode(',',$this->getRequest()->getParam('skus'));
